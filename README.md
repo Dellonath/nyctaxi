@@ -112,4 +112,4 @@ Por outro lado, o job `trusted-to-refined-nyctaxi` aponta apenas para `s3://aws-
 </p>
 
 # Análise
-Para a análise de dados, foi disponibilizado um notebook dentro da pasta `analise` deste projeto, bem como um relatório em `.pdf`. Para executar o notebook, basta apontar a leitura do dado para o arquivo `nyctaxi-sample.parquet` disponibilizado neste repositório.
+Para a análise de dados, foi disponibilizado um notebook dentro da pasta `analise` deste projeto, bem como um relatório em `.pdf`. Para executar o notebook, basta apontar a leitura do dado para o arquivo com amostras (50000 registros) `nyctaxi-sample.parquet` disponibilizado neste repositório.
