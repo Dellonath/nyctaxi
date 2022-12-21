@@ -29,10 +29,28 @@ Foi fornecido quatro conjunto de dados em formato `.json` relacionando viagens d
 ## S3
 Camadas:
 - **raw**: armazena os dados brutos, da forma como vieram em `.json`. Apenas houve a renomeação dos nomes dos arquivos. Mas a estrutura interna não foi alterada;
-- **trusted**: armazena os dados processados. Nesta etapa é realizada a renomeação de colunas, ajuste de datas e horas e conversão para tipo `.parquet`; 
+- **trusted**: armazena os dados processados. Nesta etapa é realizada a renomeação de colunas, ajuste de datas e horas e conversão para tipo `.parquet`. Além disso, nesta camada é feita o join com as informações contidas nos arquivos `.csv` sobre os vendors, bem como o depara em métodos de pagamento; 
 - **refined**: camada onde é aplicada regras de negócios. Neste caso, a regra de negócio foi a seleção apenas das colunas necessárias para responder o problema de negócio e o Union dos anos. 
 
 Bucket deve ter o nome `dadosfera-dev`, uma pasta `datalake` também deve ser criada, em seguida deve ser separado as camadas.
+
+<br>
+
+<p align="center">
+  <img src="engenharia/imagens/datalake.jpg">
+</p>
+
+A camada `raw` contém os arquivos `.json` como foram enviados, apenas deve ser feita renomeação deles. O motivo da renomeação foi apenas para padronizar.
+
+<p align="center">
+  <img src="engenharia/imagens/camada-raw.jpg">
+</p>
+
+Na camada `raw`, os arquivos `.csv` foram armazenados em um outro caminho, tal como abaixo.
+
+<p align="center">
+  <img src="engenharia/imagens/camada-raw-lookup.jpg">
+</p>
 
 ## AWS Glue
 
