@@ -24,6 +24,7 @@ Foi fornecido quatro conjunto de dados em formato `.json` relacionando viagens d
     │       └── trusted-to-refined     <- Script responsável por ler o dado processado, aplicar regra de negócio e jogar para a próxima camada (refined)
     └── analise                        <- Concentra tudo que for relacionado a análise de dados
         ├── imagens                    <- Concentra prints das análises
+        ├── dados                      <- Arquivo com uma amostra de 50 mil registros
         └── nyctaxy-eda.ipynb          <- Jupyter Notebook com as análises realizadas          
     
 ## S3
@@ -108,3 +109,6 @@ Por outro lado, o job `trusted-to-refined-nyctaxi` aponta apenas para `s3://aws-
 <p align="center">
   <img src="engenharia/imagens/workflow-executado.jpg">
 </p>
+
+# Análise
+Para a análise de dados, foi disponibilizado um notebook dentro da pasta `analise` deste projeto, bem como um relatório em `.pdf`. Para executar o notebook, basta apontar a leitura do dado para o arquivo `nyctaxi-sample.parquet` disponibilizado neste repositório.
