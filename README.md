@@ -25,6 +25,7 @@ Foi fornecido quatro conjunto de dados em formato `.json` relacionando viagens d
     └── analise                        <- Concentra tudo que for relacionado a análise de dados
         ├── imagens                    <- Concentra prints das análises
         ├── dados                      <- Arquivo com uma amostra de 50 mil registros
+        ├── relatorio.pdf              <- Arquivo com as respostas para os quesitos
         └── nyctaxy-eda.ipynb          <- Jupyter Notebook com as análises realizadas          
     
 ## S3
