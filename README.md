@@ -27,14 +27,13 @@ Foi fornecido quatro conjunto de dados em formato `.json` relacionando viagens d
         └── nyctaxy-eda.ipynb          <- Jupyter Notebook com as análises realizadas          
     
 ## S3
-Camadas:
+São, ao todo, três camadas:
 - **raw**: armazena os dados brutos, da forma como vieram em `.json`. Apenas houve a renomeação dos nomes dos arquivos. Mas a estrutura interna não foi alterada;
-- **trusted**: armazena os dados processados. Nesta etapa é realizada a renomeação de colunas, ajuste de datas e horas e conversão para tipo `.parquet`. Além disso, nesta camada é feita o join com as informações contidas nos arquivos `.csv` sobre os vendors, bem como o depara em métodos de pagamento; 
-- **refined**: camada onde é aplicada regras de negócios. Neste caso, a regra de negócio foi a seleção apenas das colunas necessárias para responder o problema de negócio e o union dos anos. 
+- **trusted**: armazena os dados processados e padronizados. Nesta etapa é realizada a renomeação de colunas, ajuste de datas e horas e conversão para tipo `.parquet`. Além disso, nesta camada é feita o join com as informações contidas nos arquivos lookup que estão em `.csv`, além do depara em métodos de pagamento; 
+- **refined**: camada onde é aplicada regras de negócios. Neste caso, a regra de negócio foi a seleção apenas das colunas necessárias para responder o problema de negócio e o union dos anos. O arquivo aqui também deve ser um `.parquet`.
 
-Bucket deve ter o nome `dadosfera-dev`, uma pasta `datalake` também deve ser criada, em seguida deve ser separado as camadas.
+Bucket deve ter o nome `dadosfera-dev`, uma pasta `datalake` deve ser criada dentro deste bucket, em seguida deve ser separado as três camadas (`raw`, `trusted` e `refined`).
 
-<br>
 
 <p align="center">
   <img src="engenharia/imagens/datalake.jpg">
@@ -109,7 +108,3 @@ Por outro lado, o job `trusted-to-refined-nyctaxi` aponta apenas para `s3://aws-
 <p align="center">
   <img src="engenharia/imagens/workflow-executado.jpg">
 </p>
-
-
-
-
