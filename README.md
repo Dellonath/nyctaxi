@@ -26,6 +26,14 @@ Foi fornecido quatro conjunto de dados em formato `.json` relacionando viagens d
         ├── imagens                    <- Concentra prints das análises
         └── nyctaxy-eda.ipynb          <- Jupyter Notebook com as análises realizadas          
     
+## S3
+Camadas:
+- **raw**: armazena os dados brutos, da forma como vieram em `.json`. Apenas houve a renomeação dos nomes dos arquivos. Mas a estrutura interna não foi alterada;
+- **trusted**: armazena os dados processados. Nesta etapa é realizada a renomeação de colunas, ajuste de datas e horas e conversão para tipo `.parquet`; 
+- **refined**: camada onde é aplicada regras de negócios. Neste caso, a regra de negócio foi a seleção apenas das colunas necessárias para responder o problema de negócio e o Union dos anos. 
+
+Bucket deve ter o nome `dadosfera-dev`, uma pasta `datalake` também deve ser criada, em seguida deve ser separado as camadas.
+
 ## AWS Glue
 
 
