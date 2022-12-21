@@ -30,7 +30,7 @@ Foi fornecido quatro conjunto de dados em formato `.json` relacionando viagens d
 Camadas:
 - **raw**: armazena os dados brutos, da forma como vieram em `.json`. Apenas houve a renomeação dos nomes dos arquivos. Mas a estrutura interna não foi alterada;
 - **trusted**: armazena os dados processados. Nesta etapa é realizada a renomeação de colunas, ajuste de datas e horas e conversão para tipo `.parquet`. Além disso, nesta camada é feita o join com as informações contidas nos arquivos `.csv` sobre os vendors, bem como o depara em métodos de pagamento; 
-- **refined**: camada onde é aplicada regras de negócios. Neste caso, a regra de negócio foi a seleção apenas das colunas necessárias para responder o problema de negócio e o Union dos anos. 
+- **refined**: camada onde é aplicada regras de negócios. Neste caso, a regra de negócio foi a seleção apenas das colunas necessárias para responder o problema de negócio e o union dos anos. 
 
 Bucket deve ter o nome `dadosfera-dev`, uma pasta `datalake` também deve ser criada, em seguida deve ser separado as camadas.
 
@@ -52,9 +52,63 @@ Na camada `raw`, os arquivos `.csv` foram armazenados em um outro caminho, tal c
   <img src="engenharia/imagens/camada-raw-lookup.jpg">
 </p>
 
+A camada `trusted` já apresenta as correções. Mas nela não foi realizada nenhum filtro de limpeza de dados, para inserir os filtros no pipeline seria necessário reuniões com o time de negócios para entender entender os dados e verificar possíveis existências de regras de negócios. Porém, uma limpeza foi feita no notebook de análise.
+
+<p align="center">
+  <img src="engenharia/imagens/camada-trusted.jpg">
+</p>
+
+Os arquivos na `trusted` já estão em `.parquet`.
+
+<p align="center">
+  <img src="engenharia/imagens/camada-trusted-parquet.jpg">
+</p>
+
+Por fim, a camada `refined`, como dito, já armazena os conjuntos de dados unidos também em `.parquet`.
+
+<p align="center">
+  <img src="engenharia/imagens/camada-refined.jpg">
+</p>
+
+
 ## AWS Glue
 
+Para o Glue, foi construído um workflow simples que processa os dados separadamente até a camada `trusted`, mas o último job fica responsável por unir os arquivos e jogar o resultado na `refined`. O workflow chama-se `dadosfera-nyctaxy-lookup`, possui ao todo 5 jobs e 2 triggers.
 
+<p align="center">
+  <img src="engenharia/imagens/workflow-aws-glue.jpg">
+</p>
+
+Apresenta-se, nesta lista, os **cinco** jobs citados:
+- `raw-to-trusted-nyctaxi-2009`: lê o `.json` de 2009, renomeia as colunas e salva em `.parquet` na `trusted`;
+- `raw-to-trusted-nyctaxi-2010`: lê o `.json` de 2010, renomeia as colunas e salva em `.parquet` na `trusted`;
+- `raw-to-trusted-nyctaxi-2011`: lê o `.json` de 2011, renomeia as colunas e salva em `.parquet` na `trusted`;
+- `raw-to-trusted-nyctaxi-2012`: lê o `.json` de 2012, renomeia as colunas e salva em `.parquet` na `trusted`;
+- `trusted-to-refined-nyctaxi`: lê os quatro `.parquet` da trusted, realiza o union e seleciona apenas as colunas que respondem as perguntas do time de negócios.
+
+<p align="center">
+  <img src="engenharia/imagens/jobs-aws-glue.jpg">
+</p>
+
+Também os **dois** triggers:
+- `start-nyctaxy`: que inicia o workflow;
+- `start-trusted-to-refined-nyctaxi`: que inicia o último job `trusted-to-refined-nyctaxi`. Ele deve aguardar os quatro jobs anteriores para disparar.
+
+<p align="center">
+  <img src="engenharia/imagens/workflow-aws-glue-detalhado.jpg">
+</p>
+
+Em relação aos scripts dos jobs, os quatro "raw-to-trusted-nyctaxi" apontam para `s3://aws-glue-assets-613671088431-us-east-1/scripts/raw-to-trusted-nyctaxi.py`, mas eles contêm o parâmetro `--YEAR_FILE` onde é especificado qual ano aquele job vai processar.
+
+<p align="center">
+  <img src="engenharia/imagens/parametro-job-aws-glue.jpg">
+</p>
+
+Por outro lado, o job `trusted-to-refined-nyctaxi` aponta apenas para `s3://aws-glue-assets-613671088431-us-east-1/scripts/trusted-to-refined-nyctaxi.py`. Ao final de todo o processo, execute o workflow e espere um resultado semelhante como abaixo:
+
+<p align="center">
+  <img src="engenharia/imagens/workflow-executado.jpg">
+</p>
 
 
 
